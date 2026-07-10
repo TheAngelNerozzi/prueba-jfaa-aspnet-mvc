@@ -18,10 +18,10 @@ namespace PruebaASPNet.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            // Si ya tiene sesión, redirigir al perfil
+            // Si ya tiene sesión, redirigir al dashboard
             if (HttpContext.Session.GetString("UserId") != null)
             {
-                return RedirectToAction("Perfil", "Home");
+                return RedirectToAction("Bienvenida", "Home");
             }
 
             // Si la cuenta está bloqueada en sesión, redirigir
@@ -123,8 +123,9 @@ namespace PruebaASPNet.Controllers
             return RedirectToAction("Login");
         }
 
-        // GET: /Account/Logout
-        [HttpGet]
+        // POST: /Account/Logout
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

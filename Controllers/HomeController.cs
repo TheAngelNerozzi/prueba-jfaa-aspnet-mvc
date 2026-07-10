@@ -54,14 +54,6 @@ namespace PruebaASPNet.Controllers
             return View(user);
         }
 
-        // POST: /Home/IniciarSesion (desde Bienvenida)
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult IniciarSesion()
-        {
-            return RedirectToAction("Perfil");
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

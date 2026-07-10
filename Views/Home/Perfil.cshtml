@@ -4,154 +4,133 @@
     Layout = "_Layout";
 }
 
-<div class="perfil-wrapper">
-    <!-- Sidebar -->
-    <div class="perfil-sidebar">
-        <div class="sidebar-icons d-flex flex-column align-items-center gap-3 pt-3">
-            <a href="#" class="sidebar-icon active" title="Inicio">
-                <i class="bi bi-house-door-fill"></i>
-            </a>
-            <a href="#" class="sidebar-icon" title="Lista">
-                <i class="bi bi-list-ul"></i>
-            </a>
-            <a href="#" class="sidebar-icon" title="Documentos">
-                <i class="bi bi-file-earmark-text"></i>
-            </a>
-            <a href="#" class="sidebar-icon" title="Buscar">
-                <i class="bi bi-search"></i>
-            </a>
+<div class="perfil-container">
+    <!-- User card -->
+    <div class="user-card mb-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="user-avatar">
+                <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h5 class="fw-bold mb-1" style="font-size: 1rem;">@Model.PrimerApellido @Model.SegundoApellido, @Model.Nombres</h5>
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    <span class="badge bg-success" style="font-size: 0.75rem;">Activo</span>
+                    <span class="text-muted small">@Model.Rol</span>
+                </div>
+                <span class="text-muted small"><i class="bi bi-geo-alt me-1"></i>@(Model.Ubicacion ?? "No especificada")</span>
+            </div>
         </div>
     </div>
 
-    <!-- Main content -->
-    <div class="perfil-main">
-        <!-- User card -->
-        <div class="user-card mb-3">
-            <div class="d-flex align-items-center gap-3">
-                <div class="user-avatar">
-                    <i class="bi bi-person-fill"></i>
-                </div>
-                <div class="flex-grow-1">
-                    <h5 class="fw-bold mb-1" style="font-size: 1rem;">@Model.PrimerApellido @Model.SegundoApellido, @Model.Nombres</h5>
-                    <div class="d-flex align-items-center gap-2 flex-wrap">
-                        <span class="badge bg-success" style="font-size: 0.75rem;">Activo</span>
-                        <span class="text-muted small">@Model.Rol</span>
+    <!-- Tabs -->
+    <ul class="nav nav-tabs perfil-tabs mb-3" id="perfilTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="basica-tab" data-bs-toggle="tab" data-bs-target="#basica" type="button" role="tab">
+                Información básica
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="responsabilidades-tab" data-bs-toggle="tab" data-bs-target="#responsabilidades" type="button" role="tab">
+                Responsabilidades
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial" type="button" role="tab">
+                Historial de responsabilidades
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab content -->
+    <div class="tab-content" id="perfilTabContent">
+        <!-- Información básica - 2 columnas -->
+        <div class="tab-pane fade show active" id="basica" role="tabpanel">
+            <div class="info-table-card">
+                <div class="row g-0">
+                    <!-- Column 1 -->
+                    <div class="col-md-6 info-col">
+                        <div class="info-row">
+                            <span class="info-label">Nombres</span>
+                            <span class="info-value">@Model.Nombres</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Tipo de Documento de Identidad</span>
+                            <span class="info-value">@Model.TipoDocumento</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Nacionalidad</span>
+                            <span class="info-value">@Model.Nacionalidad</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Correo electrónico secundario</span>
+                            <span class="info-value">@(Model.CorreoSecundario ?? "-")</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Tipo de Comunicación</span>
+                            <span class="info-value">@(Model.TipoComunicacion ?? "-")</span>
+                        </div>
                     </div>
-                    <span class="text-muted small"><i class="bi bi-geo-alt me-1"></i>@(Model.Ubicacion ?? "No especificada")</span>
+                    <!-- Column 2 -->
+                    <div class="col-md-6 info-col">
+                        <div class="info-row">
+                            <span class="info-label">Primer Apellido</span>
+                            <span class="info-value">@Model.PrimerApellido</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">N° de Documento de Identidad</span>
+                            <span class="info-value">@Model.NumeroDocumento</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Fecha de nacimiento</span>
+                            <span class="info-value">@(Model.FechaNacimiento?.ToString("dd/MM/yyyy") ?? "-")</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Sexo</span>
+                            <span class="info-value">@Model.Sexo</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Correo electrónico principal</span>
+                            <span class="info-value email-value">
+                                @Model.CorreoPrincipal
+                                <i class="bi bi-pencil-square email-edit-icon"></i>
+                            </span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Teléfono Móvil</span>
+                            <span class="info-value">@(Model.TelefonoMovil ?? "-")</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Fecha de contratación</span>
+                            <span class="info-value">@(Model.FechaContratacion?.ToString("dd/MM/yyyy") ?? "-")</span>
+                        </div>
+                    </div>
+                    <!-- Full width -->
+                    <div class="col-12 info-col">
+                        <div class="info-row">
+                            <span class="info-label">Segundo Apellido</span>
+                            <span class="info-value">@Model.SegundoApellido</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tabs -->
-        <ul class="nav nav-tabs perfil-tabs mb-3" id="perfilTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="basica-tab" data-bs-toggle="tab" data-bs-target="#basica" type="button" role="tab">
-                    Información básica
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="responsabilidades-tab" data-bs-toggle="tab" data-bs-target="#responsabilidades" type="button" role="tab">
-                    Responsabilidades
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="historial-tab" data-bs-toggle="tab" data-bs-target="#historial" type="button" role="tab">
-                    Historial de responsabilidades
-                </button>
-            </li>
-        </ul>
-
-        <!-- Tab content -->
-        <div class="tab-content" id="perfilTabContent">
-            <!-- Información básica - 2 columnas -->
-            <div class="tab-pane fade show active" id="basica" role="tabpanel">
-                <div class="info-table-card">
-                    <div class="row g-0">
-                        <!-- Column 1 -->
-                        <div class="col-md-6 info-col">
-                            <div class="info-row">
-                                <span class="info-label">Nombres</span>
-                                <span class="info-value">@Model.Nombres</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Tipo de Documento de Identidad</span>
-                                <span class="info-value">@Model.TipoDocumento</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Nacionalidad</span>
-                                <span class="info-value">@Model.Nacionalidad</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Correo electrónico secundario</span>
-                                <span class="info-value">@(Model.CorreoSecundario ?? "-")</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Tipo de Comunicación</span>
-                                <span class="info-value">@(Model.TipoComunicacion ?? "-")</span>
-                            </div>
-                        </div>
-                        <!-- Column 2 -->
-                        <div class="col-md-6 info-col">
-                            <div class="info-row">
-                                <span class="info-label">Primer Apellido</span>
-                                <span class="info-value">@Model.PrimerApellido</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">N° de Documento de Identidad</span>
-                                <span class="info-value">@Model.NumeroDocumento</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Fecha de nacimiento</span>
-                                <span class="info-value">@(Model.FechaNacimiento?.ToString("dd/MM/yyyy") ?? "-")</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Sexo</span>
-                                <span class="info-value">@Model.Sexo</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Correo electrónico principal</span>
-                                <span class="info-value email-value">
-                                    @Model.CorreoPrincipal
-                                    <i class="bi bi-pencil-square email-edit-icon"></i>
-                                </span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Teléfono Móvil</span>
-                                <span class="info-value">@(Model.TelefonoMovil ?? "-")</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Fecha de contratación</span>
-                                <span class="info-value">@(Model.FechaContratacion?.ToString("dd/MM/yyyy") ?? "-")</span>
-                            </div>
-                        </div>
-                        <!-- Full width -->
-                        <div class="col-12 info-col">
-                            <div class="info-row">
-                                <span class="info-label">Segundo Apellido</span>
-                                <span class="info-value">@Model.SegundoApellido</span>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Responsabilidades -->
+        <div class="tab-pane fade" id="responsabilidades" role="tabpanel">
+            <div class="info-table-card">
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-clipboard-data" style="font-size: 3rem;"></i>
+                    <p class="mt-3">No hay responsabilidades asignadas actualmente.</p>
                 </div>
             </div>
+        </div>
 
-            <!-- Responsabilidades -->
-            <div class="tab-pane fade" id="responsabilidades" role="tabpanel">
-                <div class="info-table-card">
-                    <div class="text-center text-muted py-5">
-                        <i class="bi bi-clipboard-data" style="font-size: 3rem;"></i>
-                        <p class="mt-3">No hay responsabilidades asignadas actualmente.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Historial -->
-            <div class="tab-pane fade" id="historial" role="tabpanel">
-                <div class="info-table-card">
-                    <div class="text-center text-muted py-5">
-                        <i class="bi bi-clock-history" style="font-size: 3rem;"></i>
-                        <p class="mt-3">No hay historial de responsabilidades.</p>
-                    </div>
+        <!-- Historial -->
+        <div class="tab-pane fade" id="historial" role="tabpanel">
+            <div class="info-table-card">
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-clock-history" style="font-size: 3rem;"></i>
+                    <p class="mt-3">No hay historial de responsabilidades.</p>
                 </div>
             </div>
         </div>

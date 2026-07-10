@@ -1,27 +1,85 @@
 @{
-    ViewData["Title"] = "Bienvenida";
+    ViewData["Title"] = "Inicio";
     Layout = "_Layout";
 }
 @{
     string nombre = ViewBag.Nombre as string ?? "Usuario";
+    string rol = Context.Session.GetString("Rol") ?? "";
 }
 
-<div class="welcome-container">
-    <div class="welcome-card">
-        <div class="text-center">
-            <!-- CEPIAK red icon -->
-            <div class="welcome-icon-circle mb-4">
-                <i class="bi bi-shield-lock-fill" style="font-size: 2.2rem; color: white;"></i>
+<div class="welcome-dashboard-container">
+    <!-- Welcome Banner -->
+    <div class="welcome-banner">
+        <div class="welcome-banner-icon">
+            <i class="bi bi-shield-lock-fill" style="font-size: 1.6rem; color: white;"></i>
+        </div>
+        <h4>¡Bienvenido, @nombre!</h4>
+        <p>Su cuenta en el aplicativo CEPIAK está activada y lista para su uso. Desde aquí puede acceder a todas las funcionalidades del sistema de gestión.</p>
+    </div>
+
+    <!-- Quick Actions -->
+    <h6 class="quick-actions-title">Acciones rápidas</h6>
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <a asp-controller="Home" asp-action="Perfil" class="quick-action-card">
+                <div class="quick-action-icon blue">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+                <h6>Mi Perfil</h6>
+                <p>Ver y editar datos</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="#" class="quick-action-card">
+                <div class="quick-action-icon green">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <h6>Documentos</h6>
+                <p>Gestionar archivos</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="#" class="quick-action-card">
+                <div class="quick-action-icon orange">
+                    <i class="bi bi-list-check"></i>
+                </div>
+                <h6>Tareas</h6>
+                <p>Ver actividades</p>
+            </a>
+        </div>
+        <div class="col-6 col-md-3">
+            <a href="#" class="quick-action-card">
+                <div class="quick-action-icon purple">
+                    <i class="bi bi-bar-chart-line"></i>
+                </div>
+                <h6>Reportes</h6>
+                <p>Consultar informes</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="info-card">
+                <div class="info-card-title">Estado de cuenta</div>
+                <div class="info-card-value text-success">Activo</div>
+                <div class="info-card-sub">Sin restricciones</div>
             </div>
-            <h4 class="fw-bold welcome-title mb-2">¡Bienvenida, @nombre!</h4>
-            <p class="text-muted mb-1">Su cuenta en el aplicativo X está activada.</p>
-            <p class="text-muted mb-4">Ya puede iniciar sesión.</p>
-            <form asp-controller="Home" asp-action="IniciarSesion" method="post">
-                @Html.AntiForgeryToken()
-                <button type="submit" class="btn btn-primary btn-ingresar px-5">
-                    Iniciar sesión
-                </button>
-            </form>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card">
+                <div class="info-card-title">Rol asignado</div>
+                <div class="info-card-value">@rol</div>
+                <div class="info-card-sub">Permisos vigentes</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="info-card">
+                <div class="info-card-title">Último acceso</div>
+                <div class="info-card-value" style="font-size: 1.1rem;">@DateTime.Now.ToString("dd/MM/yyyy")</div>
+                <div class="info-card-sub">@DateTime.Now.ToString("hh:mm tt")</div>
+            </div>
         </div>
     </div>
 </div>

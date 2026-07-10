@@ -9,42 +9,120 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <!-- Header -->
-    <header class="app-header">
-        <div class="header-content d-flex align-items-center justify-content-between">
-            @{
-                var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
-                var isPerfil = currentAction == "Perfil";
-                var isBlocked = currentAction == "CuentaBloqueada";
-            }
+    @{
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var isAuthenticated = Context.Session.GetString("UserId") != null;
+        var isPerfil = currentAction == "Perfil";
+        var isBienvenida = currentAction == "Bienvenida";
+        var isLogin = currentAction == "Login";
+        var isBlocked = currentAction == "CuentaBloqueada";
+        var showDashboardLayout = isPerfil || isBienvenida;
+    }
 
-            @if (isPerfil)
-            {
-                <!-- Perfil: hamburger left -->
-                <button class="btn header-btn p-1" aria-label="Menú">
-                    <i class="bi bi-list" style="font-size: 1.4rem; color: white;"></i>
-                </button>
-                <span class="header-title">Perfil de usuario</span>
-                <!-- Right: help + user + logout -->
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn header-btn p-1" aria-label="Ayuda">
-                        <i class="bi bi-question-circle" style="font-size: 1.2rem; color: white;"></i>
-                    </button>
-                    <div class="header-user-circle-sm">
-                        <i class="bi bi-person-fill" style="color: white; font-size: 0.8rem;"></i>
+    @if (showDashboardLayout && isAuthenticated)
+    {
+        <!-- DASHBOARD LAYOUT: Header + Sidebar + Content -->
+        <div class="dashboard-layout">
+            <!-- Top Header -->
+            <header class="app-header">
+                <div class="header-content d-flex align-items-center justify-content-between">
+                    <!-- Left: hamburger + title -->
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn header-btn p-1" id="sidebarToggle" aria-label="Menú">
+                            <i class="bi bi-list" style="font-size: 1.4rem; color: white;"></i>
+                        </button>
+                        <span class="header-title">@(isPerfil ? "Perfil de usuario" : "Inicio")</span>
                     </div>
-                    <div class="d-none d-md-block header-user-info">
-                        <div class="header-user-name">@(Context.Session.GetString("NombreCompleto") ?? "Usuario")</div>
-                        <div class="header-user-role">@(Context.Session.GetString("Rol") ?? "")</div>
+                    <!-- Right: help + user info + logout -->
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn header-btn p-1" aria-label="Ayuda">
+                            <i class="bi bi-question-circle" style="font-size: 1.2rem; color: white;"></i>
+                        </button>
+                        <div class="header-user-circle-sm">
+                            <i class="bi bi-person-fill" style="color: white; font-size: 0.8rem;"></i>
+                        </div>
+                        <div class="d-none d-md-block header-user-info">
+                            <div class="header-user-name">@(Context.Session.GetString("NombreCompleto") ?? "Usuario")</div>
+                            <div class="header-user-role">@(Context.Session.GetString("Rol") ?? "")</div>
+                        </div>
+                        <!-- Logout as POST form to properly clear session -->
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn header-btn p-1 ms-1" title="Cerrar sesión" style="text-decoration:none; border:none; background:transparent; cursor:pointer;">
+                                <i class="bi bi-box-arrow-right" style="font-size: 1.2rem; color: white;"></i>
+                            </button>
+                        </form>
                     </div>
-                    <a asp-controller="Account" asp-action="Logout" class="btn header-btn p-1 ms-1" title="Cerrar sesión" style="text-decoration:none;">
-                        <i class="bi bi-box-arrow-right" style="font-size: 1.2rem; color: white;"></i>
-                    </a>
                 </div>
-            }
-            else
-            {
-                <!-- Login/Bienvenida/Bloqueada: logo left, help right -->
+            </header>
+
+            <div class="dashboard-body">
+                <!-- Sidebar -->
+                <nav class="dashboard-sidebar" id="dashboardSidebar">
+                    <div class="sidebar-nav">
+                        <a asp-controller="Home" asp-action="Bienvenida" class="sidebar-nav-item @(isBienvenida ? "active" : "")" title="Inicio">
+                            <i class="bi bi-house-door-fill"></i>
+                            <span class="sidebar-label">Inicio</span>
+                        </a>
+                        <a asp-controller="Home" asp-action="Perfil" class="sidebar-nav-item @(isPerfil ? "active" : "")" title="Perfil">
+                            <i class="bi bi-person-fill"></i>
+                            <span class="sidebar-label">Perfil</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" title="Lista">
+                            <i class="bi bi-list-ul"></i>
+                            <span class="sidebar-label">Lista</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" title="Documentos">
+                            <i class="bi bi-file-earmark-text"></i>
+                            <span class="sidebar-label">Documentos</span>
+                        </a>
+                        <a href="#" class="sidebar-nav-item" title="Buscar">
+                            <i class="bi bi-search"></i>
+                            <span class="sidebar-label">Buscar</span>
+                        </a>
+                    </div>
+                    <!-- Logout at bottom of sidebar -->
+                    <div class="sidebar-bottom">
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="w-100">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="sidebar-nav-item sidebar-logout-btn w-100" title="Cerrar sesión">
+                                <i class="bi bi-box-arrow-left"></i>
+                                <span class="sidebar-label">Cerrar sesión</span>
+                            </button>
+                        </form>
+                    </div>
+                </nav>
+
+                <!-- Main Content Area -->
+                <main role="main" class="dashboard-content">
+                    @RenderBody()
+                </main>
+            </div>
+
+            <!-- Footer inside dashboard -->
+            <footer class="app-footer">
+                <div class="container-fluid d-flex align-items-center justify-content-between px-3 py-1">
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="footer-logo-icon">
+                            <i class="bi bi-shield-lock-fill" style="color: #C41E3A; font-size: 0.85rem;"></i>
+                        </div>
+                        <span class="footer-brand">CEPIAK</span>
+                        <span class="footer-sub">Agencia de Gobierno Digital</span>
+                    </div>
+                    <div class="d-none d-md-flex gap-3">
+                        <a href="#" class="footer-link">Política de Privacidad</a>
+                        <a href="#" class="footer-link">Condiciones de Uso</a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    }
+    else
+    {
+        <!-- LOGIN / BLOCKED LAYOUT: Simple centered -->
+        <header class="app-header">
+            <div class="header-content d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center gap-2">
                     <div class="header-logo-icon">
                         <i class="bi bi-shield-lock-fill" style="color: white; font-size: 1.1rem;"></i>
@@ -55,31 +133,29 @@
                 <button class="btn header-btn p-1" aria-label="Ayuda">
                     <i class="bi bi-question-circle" style="font-size: 1.3rem; color: white;"></i>
                 </button>
-            }
-        </div>
-    </header>
+            </div>
+        </header>
 
-    <!-- Main Content -->
-    <main role="main" class="main-bg">
-        @RenderBody()
-    </main>
+        <main role="main" class="main-bg">
+            @RenderBody()
+        </main>
 
-    <!-- Footer -->
-    <footer class="app-footer">
-        <div class="container-fluid d-flex align-items-center justify-content-between px-3 py-1">
-            <div class="d-flex align-items-center gap-2">
-                <div class="footer-logo-icon">
-                    <i class="bi bi-shield-lock-fill" style="color: #C41E3A; font-size: 0.85rem;"></i>
+        <footer class="app-footer">
+            <div class="container-fluid d-flex align-items-center justify-content-between px-3 py-1">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="footer-logo-icon">
+                        <i class="bi bi-shield-lock-fill" style="color: #C41E3A; font-size: 0.85rem;"></i>
+                    </div>
+                    <span class="footer-brand">CEPIAK</span>
+                    <span class="footer-sub">Agencia de Gobierno Digital</span>
                 </div>
-                <span class="footer-brand">CEPIAK</span>
-                <span class="footer-sub">Agencia de Gobierno Digital</span>
+                <div class="d-none d-md-flex gap-3">
+                    <a href="#" class="footer-link">Política de Privacidad</a>
+                    <a href="#" class="footer-link">Condiciones de Uso</a>
+                </div>
             </div>
-            <div class="d-flex gap-3">
-                <a href="#" class="footer-link">Política de Privacidad</a>
-                <a href="#" class="footer-link">Condiciones de Uso</a>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    }
 
     <!-- Cookie Banner -->
     <div class="cookie-banner" id="cookieBanner">
@@ -106,6 +182,26 @@
             alert('Ha optado por no recibir cookies de terceros.');
             closeCookieBanner();
         }
+
+        // Sidebar toggle for mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            var toggle = document.getElementById('sidebarToggle');
+            var sidebar = document.getElementById('dashboardSidebar');
+            if (toggle && sidebar) {
+                toggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('sidebar-open');
+                });
+                // Close sidebar when clicking outside on mobile
+                document.addEventListener('click', function(e) {
+                    if (window.innerWidth < 992 &&
+                        sidebar.classList.contains('sidebar-open') &&
+                        !sidebar.contains(e.target) &&
+                        !toggle.contains(e.target)) {
+                        sidebar.classList.remove('sidebar-open');
+                    }
+                });
+            }
+        });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
