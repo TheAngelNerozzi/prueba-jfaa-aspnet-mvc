@@ -6,13 +6,13 @@
 <div class="blocked-container">
     <div class="blocked-card">
         <div class="text-center mb-4">
-            <div class="blocked-avatar mb-3">
-                <i class="bi bi-person-x-fill" style="font-size: 3rem;"></i>
+            <div class="blocked-icon mb-3">
+                <i class="bi bi-person-lock" style="font-size: 2.8rem; color: #2196F3;"></i>
             </div>
-            <h4 class="fw-bold text-danger-dark mb-3">Cuenta bloqueada temporalmente</h4>
-            <p class="text-muted">
-                Su cuenta ha sido bloqueada temporalmente debido a exceso de intentos fallidos de inicio de sesión.
-                Haga clic en el botón para restablecer e intentar nuevamente.
+            <h5 class="fw-bold mb-3" style="color: #333;">Cuenta bloqueada temporalmente</h5>
+            <p class="text-muted" style="font-size: 0.88rem; line-height: 1.6;">
+                Has excedido el número máximo de intentos fallidos. 
+                Por seguridad, tu cuenta ha sido bloqueada temporalmente.
             </p>
         </div>
         <form asp-controller="Account" asp-action="DesbloquearCuenta" method="post">

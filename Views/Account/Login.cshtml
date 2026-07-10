@@ -1,4 +1,4 @@
-﻿@model PruebaASPNet.Models.LoginViewModel
+@model PruebaASPNet.Models.LoginViewModel
 @{
     ViewData["Title"] = "Iniciar Sesión";
     Layout = "_Layout";
@@ -7,7 +7,7 @@
 <div class="login-container">
     <div class="login-card">
         <!-- Tipo documento toggle -->
-        <div class="d-flex mb-4">
+        <div class="d-flex mb-0">
             <button type="button" class="btn doc-toggle-btn active" id="btnDNI">DNI</button>
             <button type="button" class="btn doc-toggle-btn" id="btnCE">CE</button>
         </div>
@@ -29,7 +29,7 @@
             </div>
 
             <!-- Contraseña -->
-            <div class="mb-2">
+            <div class="mb-3">
                 <label for="Password" class="form-label fw-semibold">Contraseña</label>
                 <div class="input-group">
                     <span class="input-group-text bg-white"><i class="bi bi-lock"></i></span>
@@ -41,8 +41,14 @@
                 <span asp-validation-for="Password" class="text-danger small"></span>
             </div>
 
+            <!-- Recordarme -->
+            <div class="mb-3 d-flex align-items-center gap-2">
+                <input class="form-check-input" type="checkbox" id="rememberMe" />
+                <label class="form-check-label small text-muted" for="rememberMe">¿Quieres ser recordado?</label>
+            </div>
+
             <!-- Olvidó contraseña -->
-            <div class="mb-4 text-end">
+            <div class="mb-3 text-end">
                 <a href="#" class="text-decoration-none forgot-link">¿Olvidó su contraseña?</a>
             </div>
 
@@ -54,9 +60,9 @@
     </div>
 
     <!-- Ayuda -->
-    <div class="help-section mt-4">
+    <div class="help-section mt-3">
         <div class="d-flex align-items-center gap-2">
-            <i class="bi bi-info-circle"></i>
+            <i class="bi bi-info-circle" style="color: #1976D2;"></i>
             <span>¿Necesita ayuda? contacte con el área de soporte.</span>
         </div>
     </div>
@@ -97,7 +103,6 @@
             const username = document.getElementById('Username');
             const password = document.getElementById('passwordInput');
 
-            // Clear previous
             username.classList.remove('is-invalid');
             password.classList.remove('is-invalid');
 
